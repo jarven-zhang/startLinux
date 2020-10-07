@@ -7,18 +7,6 @@
 
 #!/bin/bash
 
-##浮点数比较
-#function compare_version()
-#{
-#	echo "p1:"$1
-#	echo "p2:"$2
-#	if [ `echo "$1 < $2"|bc` -eq 1 ] ; then 
-#		 echo  "$1 < $2 " 
-#	 else 
-#		 echo "$1 > $2 " 
-#	fi
-#}
-
 #1. Install devtool , for gcc version > 5.0
 # Centos的版本是7或是8，默认的GCC版本是低于5的不支持C++11，
 # 需要安装devtool来使用gcc5.0以上的版本.
@@ -30,14 +18,29 @@ install_devtool()
 }
 
 GCC_VERSION=`gcc -dumpversion | awk -F . '{print $1}'`
-#compare_version $GCC_VERSION 7
-if [ $GCC_VERSION -gt 5 ]
-then
-	echo "GCC version:"$GCC_VERSION
-else
-	echo "Current gcc version is too old("$GCC_VERSION"), enable the devtool"
-	scl enable devtoolset-7 bash
-	if [ $? -ne 0 ];then
-		install_devtool
+BASE_GCC=5
+enable_cpp11()
+{
+	#compare_version $GCC_VERSION 7
+	if [ $GCC_VERSION -gt $BASE_GCC ]
+	then
+		echo "GCC version:"$GCC_VERSION
+	else
+		echo "Current gcc version is too old("$GCC_VERSION"), enable the devtool"
+		scl enable devtoolset-7 bash
+		if [ $? -ne 0 ];then
+			install_devtool
+		fi
 	fi
-fi
+}
+
+install_base()
+{
+	for SOFT in gcc git wget
+	do
+		sudo yum install -y ${SOFT}	
+	done
+}
+
+install_base
+enable_cpp11
