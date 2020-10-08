@@ -7,7 +7,7 @@
 
 #!/bin/bash
 
-#1. Install devtool , for gcc version > 5.0
+#2. Install devtool , for gcc version > 5.0
 # Centos的版本是7或是8，默认的GCC版本是低于5的不支持C++11，
 # 需要安装devtool来使用gcc5.0以上的版本.
 install_devtool()
@@ -34,11 +34,14 @@ enable_cpp11()
 	fi
 }
 
+#1.Install basic soft
 install_base()
 {
-	for SOFT in gcc git wget
+	for SOFT in gcc git wget vim
 	do
-		sudo yum install -y ${SOFT}	
+		if ! type $SOFT >/dev/null 2>&1; then
+			sudo yum install -y ${SOFT}	
+		fi
 	done
 }
 
