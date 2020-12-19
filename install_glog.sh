@@ -31,7 +31,7 @@ install_glog()
 	cd glog
 	cmake -H. -Bbuild -G "Unix Makefiles"
 	cmake --build build
-	cmake --build build --target install
+	sudo cmake --build build --target install
 }
 
 
